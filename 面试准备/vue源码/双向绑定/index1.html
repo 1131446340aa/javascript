@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <input v-model="text">
+        <div>{{text}}</div>
+        <div>{{text1.a}}</div>
+    </div>
+    <script>
+        class Vue {
+            constructor(opts) {
+                this.data = opts.data   //获取data
+                this.watch = opts.watch   //获取watch
+                let el = document.getElementById(opts.el) // 获取dom根节点
+                new Observe(this)  
+                let element = this.documentToElement(el)
+                el.appendChild(element)
+            }
+            documentToElement(node) {
+                let child = null
+                let flags = document.createDocumentFragment()
+
+                while (child = node.firstChild) {
+
+                    flags.appendChild(child)
+                    this.complier(child)
+                }
+                return flags
+            }
+            complier(node) {
+                let reg = /\{\{(.*)\}\}/
+
+                if (node.nodeType === 1) {
+                    let attrs = node.attributes
+                    Array.from(attrs).forEach(attr => {
+                        if (attr.nodeName === 'v-model') {
+                            let name = attr.nodeValue
+                            node.addEventListener('input', (e) => {
+                                this.data[name] = e.target.value
+                                this.data.text1.a = 5
+                            })
+                            node.value = this.data[name]
+                        }
+                    })
+                    if (node.textContent && reg.test(node.textContent)) {
+                        let name = RegExp.$1.trim()
+                        let nameArr = name.split('.')
+                        new Watcher(this.data, node, nameArr)
+                    }
+                }
+            }
+        }
+        class Observe {
+            constructor(opts) {
+                this._that = opts
+                this.data = opts.data || opts
+                if (!Array.isArray(this.data)) {
+                    Object.keys(this.data).forEach(key => {
+                        this.defineReactive(this.data, key, this.data[key])
+                    })
+                } else {
+                    let Array_Proto = Array.prototype
+                    let Array_proto_ = Object.create(Array_Proto)
+                    let ArrayMethods = ['pop', 'shift', 'unshift', 'push', 'sort', 'reverse', 'splice']
+                    this.data.__proto__ = Array_proto_
+                    ArrayMethods.forEach(method => {
+                        let original = Array_Proto[method]
+                        Object.defineProperty(Array_proto_, method, {
+                            value(...args) {
+                                return original.apply(this, args)
+                            }
+                        })
+                    })
+                }
+
+            }
+            defineReactive(obj, key, value) {
+                let _that = this
+                if (value && typeof value === 'object') new Observe(value)
+                let dep = new Dep()
+                Object.defineProperty(obj, key, {
+                    get() {
+                       
+                        
+                        if (Dep.target) dep.addsub(Dep.target)
+                        return value
+                    },
+                    set(val) {
+                        if (_that._that.watch && typeof _that._that.watch[key] === 'function') {
+                            _that._that.watch[key].call(this, value, val)
+                        }
+                        value = val
+                        dep.notify()
+                    }
+                })
+            }
+        }
+        class Dep {
+            constructor() {
+                this.subs = []
+            }
+            addsub(sub) {
+                this.subs.push(sub)
+            }
+            notify() {
+                this.subs.forEach(sub => {
+                    sub.update()
+                })
+            }
+        }
+        class Watcher {
+            constructor(vm, node, name) {
+                Dep.target = this
+                this.vm = vm
+                this.node = node
+                this.name = name
+                this.update()
+                Dep.target = null
+            }
+            update() {
+                let value = this.vm
+
+                for (let i = 0; i < this.name.length; i++) {
+
+                    value = value[this.name[i]]
+
+                }
+                this.node.textContent = value
+            }
+        }
+        let vm = new Vue({
+            el: "app",
+            data: {
+                text: 'hello',
+                text1: { a: 1 },
+                arr:[3]
+            },
+            watch: {
+                text(newval, oldval) {
+                    console.log(newval, oldval);
+                }
+            }
+        })
+       
+        
+
+        
+        
+    </script>
+</body>
+
+</html>

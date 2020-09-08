@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            flex-direction: column;
+            flex-wrap: wrap;
+            flex-flow: wrap;
+            justify-content: start;
+            align-items: start;
+            
+        }
+    </style>
+</head>
+<body>
+    <div>1</div>
+    <script>
+        console.log(12);
+        
+        window.addEventListener('message',(e)=>{
+            console.log(e);
+            // window.parent.postMessage('c', './b.html');
+        })
+    </script>
+</body>
+</html>

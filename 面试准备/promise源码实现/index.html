@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            background-color: pink;
+            height: 40px;
+            width: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div"></div>
+    <script>
+        let div = document.querySelector('.div')
+
+
+        function run() {
+
+
+
+            if (div.clientWidth < 1000) {
+
+                if (requestAnimationFrame) {
+                    requestAnimationFrame(() => {
+
+                        div.style.width = div.clientWidth + 1 + 'px'
+
+                        run()
+                    })
+                }
+                else {
+                    setTimeout(() => {
+                        div.style.width = div.clientWidth + 1 + 'px'
+
+                        run()
+                    }, 60)
+                }
+
+            }
+        }
+        run()
+    </script>
+</body>
+
+</html>

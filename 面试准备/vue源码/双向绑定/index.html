@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="text">
+        <div>{{text}}</div>
+        <!-- <div>{{text}}</div>
+        <div>{{text}}</div>
+        <div>{{text}}</div> -->
+        <div>{{text1.a}}</div>
+
+    </div>
+    <script>
+        class Vue {
+            constructor(opts) {
+                this.data = opts.data
+                this.watch = opts.watch
+                let id = document.getElementById(opts.el)
+                new Observe(this.data)
+                let element = this.elementToFragmen(id)
+                id.appendChild(element)
+            }
+            elementToFragmen(node) {
+                let child = null
+                let x =node
+                let flags = document.createDocumentFragment()                        
+                while (child = node.firstChild) {    
+                    flags.appendChild(child)
+                    this.complie(child)
+                   
+                }
+              
+                
+                return flags
+            }
+            complie(node) {
+                let reg = /\{\{(.*)\}\}/
+                if (node.nodeType === 1) {
+                    let attrs = node.attributes
+                    Array.from(attrs).forEach(attr => {
+                        if (attr.nodeName === 'v-model') {
+                            let name = attr.nodeValue
+                            node.addEventListener('input', (e) => {
+                                this.data[name] = e.target.value
+
+                                this.data.text1.a = 4
+                            })
+
+                            node.value = this.data[name]
+                        }
+                    })
+                    if (node.textContent) {
+                        if (reg.test(node.textContent)) {
+                            let name = RegExp.$1.trim()
+                            let nameArray = name.split('.')
+                            new Watcher(this.data, node, nameArray)
+                        }
+                    }
+                }
+            }
+        }
+        class Observe {
+            constructor(data) {
+                if (!Array.isArray(data)) {
+                    Object.keys(data).forEach(key => {
+                        this.defineReactive(data, key, data[key])
+                    })
+                }
+            }
+            defineReactive(obj, key, value) {
+                if (value && typeof value === 'object') new Observe(value)
+                let dep = new Dep()
+                Object.defineProperty(obj, key, {
+                    get() {
+
+                        if (Dep.target) {
+                            dep.addsub(Dep.target)
+                          
+                        }
+                        return value
+                    },
+                    set(val) {
+                        // console.log(val);
+
+                        value = val
+                        if (this.watch && this.watch[key] && typeof this.watch[key] === 'function') {
+                            this.watch[key].call(this, val, value)
+                        }
+                       
+                        dep.notify()
+                    }
+                })
+            }
+        }
+        class Dep {
+            constructor() {
+                this.subs = []
+            }
+            addsub(sub) {
+                this.subs.push(sub)
+
+
+            }
+            notify() {
+
+                this.subs.forEach(sub => {
+                    sub.update()
+                })
+            }
+        }
+        class Watcher {
+            constructor(vm, node, name) {
+                Dep.target = this
+                this.vm = vm
+                this.node = node
+                this.name = name
+                this.update()
+                Dep.target = null
+            }
+            update() {
+                let value = this.vm
+
+                for (let i = 0; i < this.name.length; i++) {
+
+                    value = value[this.name[i]]
+
+                }
+                this.node.textContent = value
+            }
+        }
+        let vm = new Vue({
+            el: "app",
+            data: {
+                text: 'hello',
+                text1: {
+                    a: 3
+                },
+                watch: {
+                    text(val) {
+                        console.log(val);
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

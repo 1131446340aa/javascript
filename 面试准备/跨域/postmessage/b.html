@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>3</div>
+    <iframe src="http://localhost:4004/postmessage/a.html" frameborder="0"></iframe>
+   <script>
+
+      document.querySelector('iframe').onload=function(){
+        
+          document.querySelector('iframe').contentWindow.postMessage('a','http://localhost:4004')
+      }
+   </script> 
+</body>
+</html>

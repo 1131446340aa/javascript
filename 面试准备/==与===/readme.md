@@ -1,0 +1,9 @@
+==先判断类型是否相等,类型相等比较值的大小
+
+类型不相等先类型转化
+判断两者类似是否为null和undefined
+判断两者是否为字符串或者number,如果有字符串会转化为number
+
+判断是否存在boolean,是的话会将boolean转化为数字
+
+如果一方为object,另一方为number,string,symbol,先将对象转化为原始数据类型

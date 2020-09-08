@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="./index1.js"></script>
+    <script>
+        ajax({
+            url: 'http://39.99.254.180:8001/user/updateUser',
+            type: "POST",
+            contentType: "application/json",
+            dataType: 'json',
+            data: JSON.stringify({ id: "1276420823260991490", username: "21123", gender: "女", academy: "撒大声地", major: "大多数" }),
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (e) {
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        })
+
+        ajax({
+            url: 'http://musicapi.leanapp.cn/dj/program',
+            type: "gEt",
+            data: JSON.stringify({ rid: 336355127}),
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (e) {
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        })
+    </script>
+</body>
+
+</html>

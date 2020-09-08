@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <div class="main">
+        <input type="image" class="arrow arrow-l" src="./image/right.png">
+        <input type="image" class="arrow arrow-r" src="./image/left.png">
+        <ul>
+        </ul>
+    </div>
+    <script src="./index.js">
+
+    </script>
+    <script>
+        var arrow_l = document.querySelector('.arrow-l')
+        var arrow_r = document.querySelector('.arrow-r')
+        var main = document.querySelector('.main')
+        let images = ['./image/1.png', './image/2.png', './image/3.png']
+        let parent = document.querySelector('ul')
+        new Swiper({ main, parent, images, arrow_l, arrow_r, width: 400, duration: 1000, height: 180 })
+
+    </script>
+</body>
+
+</html>

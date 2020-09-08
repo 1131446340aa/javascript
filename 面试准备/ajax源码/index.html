@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function ajax(method, url, data, callback, flag) {
+            var xhr = null;
+            if (window.XMLHttpRequest) {
+                xhr = new XMLHttpRequest();
+            } else {
+                xhr = new ActiveXObject('Microsoft.XMLHttp');
+            }
+            if (method == 'GET') {
+                xhr.open(method, url + '?' + data, flag);
+                xhr.send();
+            } else if (method == 'POST') {
+                xhr.open(method, url, flag);
+                xhr.setRequestHeader('content-type', 'application/json');
+                xhr.send(data);
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {//需要注意的也就是在状态数值state更新每次都会触发函数
+                    if (xhr.status == 200) {
+                        callback(JSON.parse(xhr.responseText));
+                    }
+                }
+            }
+        }
+        ajax('GET', 'http://musicapi.leanapp.cn/dj/program', JSON.stringify({ rid:336355127 }), (res) => {
+            console.log(res);
+        }, true)
+    </script>
+</body>
+
+</html>

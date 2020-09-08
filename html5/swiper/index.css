@@ -1,0 +1,61 @@
+.main {
+  position: absolute;
+  overflow: hidden;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-size: 0;
+}
+
+img {
+  position: absolute;
+}
+.arrow {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  display: none;
+  z-index: 1;
+  outline: none;
+}
+
+.arrow-l {
+  left: 0;
+}
+
+.arrow-r {
+  right: 0;
+}
+
+input.arrow-r, input.arrow-l {
+  width: 30px;
+  height: 30px;
+}
+
+ul li {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid #000;
+  margin-left: 5px;
+}
+
+.current {
+  background-color: red;
+}
+ul {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, 0);
+}
